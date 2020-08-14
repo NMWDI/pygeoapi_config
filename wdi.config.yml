@@ -1,0 +1,62 @@
+server:
+        bind:
+                host: 0.0.0.0
+                port: 80
+        url: http://wells.newmexicowaterdata.org
+        cors: true
+        pretty_print: true
+        language: en-US
+        encoding: utf-8
+        map: 
+                url: https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png
+                attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> | Map data &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+        limit: 10
+logging:
+        level: ERROR
+  #logfile: /tmp/pygeoapi.log
+metadata:
+        identification:
+                title: WDI PyGEOAPI
+                description: no description
+                keywords:
+                        - geospatial
+                        - data
+                        - api
+                keywords_type: theme
+                terms_of_service: https://creativecommons.org/licences/by/4.0/
+                url: https://newmexicowaterdata.org
+        license:
+                name: CC-BY 4.0 license
+                url: https://creativecommons.org/licenses/by/4.0/
+        provider:
+                name: NM WDI
+                url: https://newmexicowaterdata.org
+        contact:
+                name: Ross, Jake
+                position: Technical Lead
+                address: 801 Leroy Place
+                city: Socorro
+                stateorprovince: New Mexico
+                postalcode: 87801
+                country: USA
+                email: jake.ross@nmt.edu
+                role: pointOfContact
+resources:
+        wells:
+                type: collection
+                title: Wells
+                description: New Mexico Water Wells
+                keywords:
+                        - observations
+                        - monitoring
+                links: []
+                extents:
+                        spatial:
+                                bbox: [-180,-90,180,90]
+                                crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
+                provider:
+                        name: SQLiteGPKG
+                        data: data/wells.gpkg
+                        table: wells
+                        id_field: id
+
