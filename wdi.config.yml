@@ -42,10 +42,10 @@ metadata:
                 email: jake.ross@nmt.edu
                 role: pointOfContact
 resources:
-        wells:
+        nmbgmr_wells:
                 type: collection
-                title: Wells
-                description: New Mexico Water Wells
+                title: NMBGMR Wells
+                description: New Mexico Bureau of Geology  Water Wells
                 keywords:
                         - observations
                         - monitoring
@@ -56,7 +56,24 @@ resources:
                                 crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
                 provider:
                         name: SQLiteGPKG
-                        data: data/wells.gpkg
-                        table: wells
+                        data: data/nmbgmr_wells.gpkg
+                        table: nmbgmr_wells
                         id_field: id
 
+        ose_wells:
+                type: collection
+                title: NM OSE Wells
+                description: New Mexico Office of the State Engineer Wells
+                keywords:
+                        - observations
+                        - monitoring
+                links: []
+                extents:
+                        spatial: 
+                                bbox: [-180,-90, 180,90]
+                                crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
+                provider:
+                        name: SQLiteGPKG
+                        data: data/ose_wells.gpkg
+                        table: ose_wells
+                        id_field: id
