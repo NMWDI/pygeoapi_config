@@ -1,7 +1,7 @@
 version: "3"
 services:
         pygeoapi:
-                image: geopython/pygeoapi:0.8.0
+                image: internetofwater/pygeoapi-geoconnex:contextmod
                 volumes:
                         - ./wdi.config.yml:/pygeoapi/local.config.yml
                         - ./nmbgmr_wells.gpkg:/pygeoapi/data/nmbgmr_wells.gpkg
