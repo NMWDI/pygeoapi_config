@@ -50,7 +50,7 @@ def nmbgmr_factory(loc, thing):
     props = thing['properties']
     props['id'] = loc['name']
     props['agency_id'] = thing['name']
-    props.pop('@nmbgmr.point_id')
+    props.pop('@nmbgmr.point_id', None)
 
     f = Feature(
         properties=props,

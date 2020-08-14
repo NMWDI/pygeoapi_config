@@ -4,6 +4,7 @@ services:
                 image: geopython/pygeoapi:0.8.0
                 volumes:
                         - ./wdi.config.yml:/pygeoapi/local.config.yml
-                        - ../pygeoapi_util/nmbgmr_wells.gpkg:/pygeoapi/data/nmbgmr_wells.gpkg
+                        - ./nmbgmr_wells.gpkg:/pygeoapi/data/nmbgmr_wells.gpkg
+                        - ./ose_wells.gpkg:/pygeoapi/data/ose_wells.gpkg
                 ports:
                         - 80:80
