@@ -64,6 +64,7 @@ resources:
                         - place: https://schema.org/geoWithin
                         - county: https://schema.org/geoWithin
                         - huc8: https://schema.org/geoWithin
+                        - sta: https://www.w3.org/ns/sosa/sosa:isFeatureOfInterestOf
 
         ose_wells:
                 type: collection
@@ -87,3 +88,4 @@ resources:
                         - place: https://schema.org/geoWithin
                         - county: https://schema.org/geoWithin
                         - huc8: https://schema.org/geoWithin
+                        - sta: https://www.w3.org/ns/sosa/sosa:isFeatureOfInterestOf

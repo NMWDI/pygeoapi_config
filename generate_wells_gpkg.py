@@ -72,10 +72,13 @@ def ose_props_factory(loc, thing):
 def get_geojson_features(url, factory):
     def feature_factory(loc, thing):
         props = factory(loc, thing)
+        props['sta'] = '{}?$expand=Datastreams/Observations'.format(thing['@iot.selfLink'])
         props['state'] = get_state(loc)
         props['huc8'] = get_huc8(loc)
         props['place'] = get_place(loc)
         props['county'] = get_county(loc)
+
+        print('construct: {}. properties={}'.format(thing['name'], props))
         return Feature(properties=props,
                        geometry=Point(loc['location']['coordinates']))
 
@@ -93,9 +96,9 @@ def write_gpkg(fc, name='nmbgmr_wells'):
 
 def main():
     # write nmbgmr wells
-    url = 'https://st.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
-    fs = get_geojson_features(url, nmbgmr_props_factory)
-    write_gpkg(fs)
+    # url = 'https://st.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
+    # fs = get_geojson_features(url, nmbgmr_props_factory)
+    # write_gpkg(fs)
 
     url = 'https://ose.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
     fs = get_geojson_features(url, ose_props_factory)
