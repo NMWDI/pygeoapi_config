@@ -17,6 +17,8 @@ from geopandas import GeoDataFrame
 import requests
 from geojson import Feature, Point, FeatureCollection
 
+from topo import get_state, get_huc8, get_place, get_county
+
 
 def rget(url, callback=None, recursive=True):
     items = []
@@ -46,32 +48,39 @@ def rget(url, callback=None, recursive=True):
     return items
 
 
-def nmbgmr_factory(loc, thing):
+def nmbgmr_props_factory(loc, thing):
     props = thing['properties']
     props['id'] = loc['name']
     props['agency_id'] = thing['name']
     props.pop('@nmbgmr.point_id', None)
+    try:
+        wd = float(props.pop('welldepth', 0))
+    except BaseException:
+        wd = 0
+    props['welldepth'] = float(wd)
 
-    f = Feature(
-        properties=props,
-        geometry=Point(loc['location']['coordinates']))
-    return f
+    return props
 
 
-def ose_factory(loc, thing):
+def ose_props_factory(loc, thing):
     props = thing['properties']
     props['id'] = loc['name']
     props['agency_id'] = thing['name']
-
-    f = Feature(
-        properties=props,
-        geometry=Point(loc['location']['coordinates']))
-    return f
+    return props
 
 
 def get_geojson_features(url, factory):
-    items = rget(url, recursive=False)
-    return FeatureCollection([factory(i, thing) for i in items for thing in i['Things']])
+    def feature_factory(loc, thing):
+        props = factory(loc, thing)
+        props['state'] = get_state(loc)
+        props['huc8'] = get_huc8(loc)
+        props['place'] = get_place(loc)
+        props['county'] = get_county(loc)
+        return Feature(properties=props,
+                       geometry=Point(loc['location']['coordinates']))
+
+    items = rget(url, recursive=True)
+    return FeatureCollection([feature_factory(i, thing) for i in items for thing in i['Things']])
 
 
 def write_gpkg(fc, name='nmbgmr_wells'):
@@ -85,14 +94,12 @@ def write_gpkg(fc, name='nmbgmr_wells'):
 def main():
     # write nmbgmr wells
     url = 'https://st.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
-    fs = get_geojson_features(url, nmbgmr_factory)
+    fs = get_geojson_features(url, nmbgmr_props_factory)
     write_gpkg(fs)
 
     url = 'https://ose.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
-    fs = get_geojson_features(url, ose_factory)
+    fs = get_geojson_features(url, ose_props_factory)
     write_gpkg(fs, 'ose_wells')
-
-
 
 
 if __name__ == '__main__':

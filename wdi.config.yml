@@ -59,6 +59,11 @@ resources:
                         data: data/nmbgmr_wells.gpkg
                         table: nmbgmr_wells
                         id_field: id
+                context:
+                        - state: https://schema.org/geoWithin
+                        - place: https://schema.org/geoWithin
+                        - county: https://schema.org/geoWithin
+                        - huc8: https://schema.org/geoWithin
 
         ose_wells:
                 type: collection
@@ -77,3 +82,8 @@ resources:
                         data: data/ose_wells.gpkg
                         table: ose_wells
                         id_field: id
+                context:
+                        - state: https://schema.org/geoWithin
+                        - place: https://schema.org/geoWithin
+                        - county: https://schema.org/geoWithin
+                        - huc8: https://schema.org/geoWithin
