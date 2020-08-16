@@ -50,6 +50,7 @@ def nmbgmr_factory(loc, thing):
     props = thing['properties']
     props['id'] = loc['name']
     props['agency_id'] = thing['name']
+    props['uri'] = "https://geoconnex.us/nmwdi/nmbgmr/wells/" + props['id']
     props.pop('@nmbgmr.point_id', None)
 
     f = Feature(
@@ -62,6 +63,7 @@ def ose_factory(loc, thing):
     props = thing['properties']
     props['id'] = loc['name']
     props['agency_id'] = thing['name']
+    props['uri'] = "https://geoconnex.us/nmwdi/ose/wells/" + props['id']
 
     f = Feature(
         properties=props,
