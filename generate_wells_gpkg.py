@@ -96,9 +96,9 @@ def write_gpkg(fc, name='nmbgmr_wells'):
 
 def main():
     # write nmbgmr wells
-    # url = 'https://st.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
-    # fs = get_geojson_features(url, nmbgmr_props_factory)
-    # write_gpkg(fs)
+    url = 'https://st.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
+    fs = get_geojson_features(url, nmbgmr_props_factory)
+    write_gpkg(fs)
 
     url = 'https://ose.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
     fs = get_geojson_features(url, ose_props_factory)
