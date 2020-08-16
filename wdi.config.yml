@@ -59,6 +59,7 @@ resources:
                         data: data/nmbgmr_wells.gpkg
                         table: nmbgmr_wells
                         id_field: id
+                        uri_field: uri
                 context:
                         - state: https://schema.org/geoWithin
                         - place: https://schema.org/geoWithin
@@ -83,6 +84,7 @@ resources:
                         data: data/ose_wells.gpkg
                         table: ose_wells
                         id_field: id
+                        uri_field: uri
                 context:
                         - state: https://schema.org/geoWithin
                         - place: https://schema.org/geoWithin
