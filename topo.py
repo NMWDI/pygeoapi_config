@@ -19,12 +19,13 @@ import geojson
 from shapely.geometry import shape, Point
 
 
-def within(loc, regions, targetkey):
+def within(loc, regions, targetkey, tag):
     locpt = Point(loc['location']['coordinates'])
     for feature in regions:
         p = shape(feature['geometry'])
         if p.contains(locpt):
-            return feature['properties'][targetkey]
+            v = feature['properties'][targetkey]
+            return geoconnex_url(tag, v)
 
 
 __cache__ = {}
@@ -41,19 +42,24 @@ def get_boundaries(name):
 
 def get_huc8(loc):
     regions = get_boundaries('wbdhu8_a_nm.geojson')
-    return within(loc, regions, 'HUC8')
+    return within(loc, regions, 'HUC8', 'hu08')
 
 
 def get_place(loc):
     regions = get_boundaries('tl_2015_35_place.geojson')
-    return within(loc, regions, 'GEOID')
+    return within(loc, regions, 'GEOID', 'places')
 
 
 def get_county(loc):
     regions = get_boundaries('tl_2018_nm_county.geojson')
-    return within(loc, regions, 'GEOID')
+    return within(loc, regions, 'GEOID', 'counties')
+
+
+def geoconnex_url(a, b):
+    return 'https://geoconnex.us/ref/{}/{}'.format(a, b)
 
 
 def get_state(loc):
-    return 35
+    return geoconnex_url('states', 35)
+
 # ============= EOF =============================================
