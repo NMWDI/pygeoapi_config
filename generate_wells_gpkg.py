@@ -48,6 +48,17 @@ def rget(url, callback=None, recursive=True):
     return items
 
 
+GEOCONNEX = 'https://geoconnex.us'
+
+
+def nmbgmr_uri_factory(name):
+    return '{}/nmwdi/nmbgmr/wells/{}'.format(GEOCONNEX, name)
+
+
+def ose_uri_factory(name):
+    return '{}/nmwdi/ose/wells/{}'.format(GEOCONNEX, name)
+
+
 def nmbgmr_props_factory(loc, thing):
     props = thing['properties']
     props['id'] = loc['name']
@@ -69,7 +80,7 @@ def ose_props_factory(loc, thing):
     return props
 
 
-def get_geojson_features(url, factory):
+def get_geojson_features(url, factory, uri_factory):
     def feature_factory(loc, thing):
         props = factory(loc, thing)
         props['sta'] = '{}?$expand=Datastreams/Observations'.format(thing['@iot.selfLink'])
@@ -77,6 +88,7 @@ def get_geojson_features(url, factory):
         props['huc8'] = get_huc8(loc)
         props['place'] = get_place(loc)
         props['county'] = get_county(loc)
+        props['uri'] = uri_factory(thing['name'])
 
         print('construct: {}. properties={}'.format(thing['name'], props))
         return Feature(properties=props,
@@ -97,11 +109,11 @@ def write_gpkg(fc, name='nmbgmr_wells'):
 def main():
     # write nmbgmr wells
     url = 'https://st.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
-    fs = get_geojson_features(url, nmbgmr_props_factory)
+    fs = get_geojson_features(url, nmbgmr_props_factory, nmbgmr_uri_factory)
     write_gpkg(fs)
 
     url = 'https://ose.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$expand=Things'
-    fs = get_geojson_features(url, ose_props_factory)
+    fs = get_geojson_features(url, ose_props_factory, ose_uri_factory)
     write_gpkg(fs, 'ose_wells')
 
 
