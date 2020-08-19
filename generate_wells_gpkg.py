@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ===============================================================================
+from pprint import pprint, pformat
+
 from geopandas import GeoDataFrame
 import requests
 from geojson import Feature, Point, FeatureCollection
@@ -61,7 +63,8 @@ def ose_uri_factory(name):
 
 def nmbgmr_props_factory(loc, thing):
     props = thing['properties']
-    props['id'] = loc['name']
+    # props['id'] = loc['name']
+    props['id'] = thing['name']
     props['agency_id'] = thing['name']
     props.pop('@nmbgmr.point_id', None)
     try:
@@ -75,13 +78,14 @@ def nmbgmr_props_factory(loc, thing):
 
 def ose_props_factory(loc, thing):
     props = thing['properties']
-    props['id'] = loc['name']
+    # props['id'] = loc['name']
+    props['id'] = thing['name']
     props['agency_id'] = thing['name']
     return props
 
 
 def get_geojson_features(url, factory, uri_factory):
-    def feature_factory(loc, thing):
+    def feature_factory(i, loc, thing):
         props = factory(loc, thing)
         props['sta'] = '{}?$expand=Datastreams/Observations'.format(thing['@iot.selfLink'])
         props['state'] = get_state(loc)
@@ -90,12 +94,13 @@ def get_geojson_features(url, factory, uri_factory):
         props['county'] = get_county(loc)
         props['uri'] = uri_factory(thing['name'])
 
-        print('construct: {}. properties={}'.format(thing['name'], props))
+        print('construct:{:05n} {} properties={}'.format(i, thing['name'],
+                                                         pformat(props)))
         return Feature(properties=props,
                        geometry=Point(loc['location']['coordinates']))
 
     items = rget(url, recursive=True)
-    return FeatureCollection([feature_factory(i, thing) for i in items for thing in i['Things']])
+    return FeatureCollection([feature_factory(i, loc, thing) for i, loc in enumerate(items) for thing in loc['Things']])
 
 
 def write_gpkg(fc, name='nmbgmr_wells'):
